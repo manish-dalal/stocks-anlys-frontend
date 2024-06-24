@@ -11,16 +11,24 @@ export const getDaysArray = (total) => {
   return arr;
 };
 
-const transformResponse = (response) => {
+const transformResponse = ({ data, type, minDiff }) => {
+  const response = data;
   let stocksMap = {};
   const finalRes = response.positions.map((e) => {
     const topList = JSON.parse(e.text);
     const oiMap = {};
     const priceMap = {};
     stocksMap = topList.reduce((acArr, element) => {
-      oiMap[element.Symbol] = element['%chng in OI'];
-      priceMap[element.Symbol] = element['%chng'];
-      return { ...acArr, [element.Symbol]: element['%chng in OI'] };
+      if (
+        (type === '1' && Math.abs(parseFloat(element['%chng in OI'])) >= minDiff) ||
+        (type === '2' && Math.abs(parseFloat(element['%chng'])) >= minDiff)
+      ) {
+        oiMap[element.Symbol] = element['%chng in OI'];
+        priceMap[element.Symbol] = element['%chng'];
+        return { ...acArr, [element.Symbol]: element['%chng in OI'] };
+      }
+
+      return { ...acArr };
     }, stocksMap);
     return {
       createdAt: moment(e.createdAt).format('h:mm'),
@@ -28,23 +36,26 @@ const transformResponse = (response) => {
       priceMap,
     };
   });
-//   data: finalRes.sort(function (a, b) {
-//     return a.createdAt.localeCompare(b.createdAt);
-//   }),
+  //   data: finalRes.sort(function (a, b) {
+  //     return a.createdAt.localeCompare(b.createdAt);
+  //   }),
+  const latestData = response.positions.length ? response.positions[response.positions.length - 1] : [];
   return {
+    latestDate: latestData.createdAt,
+    latestData: JSON.parse(latestData.text),
     stocksKeys: Object.keys(stocksMap),
     stocksMap,
     data: finalRes,
   };
 };
 
-export const fetchData = (date) => {
+export const fetchData = ({ date, type, minDiff }) => {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await axios.get(
         `https://8948bdad-9d60-4da8-9923-5762f04c45d8-00-1y1zyfk9ljr44.sisko.replit.dev/api/position/v1/list?date=${date}`
       );
-      const transformedRes = transformResponse(response.data);
+      const transformedRes = transformResponse({ data: response.data, type, minDiff });
       return resolve(transformedRes);
     } catch (error) {
       return resolve({});
