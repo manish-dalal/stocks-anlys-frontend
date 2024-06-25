@@ -10,12 +10,40 @@
 .App-header {
   display: flex;
   height: 50px;
-  gap: 20px;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
 
+.App-header-r {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
 .refresh-button {
   display: flex;
   align-items: center;
+}
+
+.graph-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-symbol {
+  cursor: pointer
+}
+
+.table-container-row {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 5px;
+
+  table {
+    flex: 1
+  }
 }

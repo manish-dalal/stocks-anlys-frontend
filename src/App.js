@@ -33,57 +33,61 @@ const App = () => {
       console.log('error', error);
       setloading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, minDiff, type]);
 
   const resetChanges = () => {
     setdate(daysList[0]);
     setType('1');
-    setMinDiff(0.1)
+    setMinDiff(0.1);
   };
 
   useEffect(() => {
     loadData();
-  }, [date, loadData]);
-
-  useEffect(() => {
-    const myInterval = setInterval(loadData, 120 * 1000);
+    const myInterval = setInterval(() => loadData(), 120 * 1000);
     return () => clearInterval(myInterval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [date, minDiff, type]);
 
   return (
     <div className='App'>
       <div className='App-header'>
-        <Form.Select onChange={(el) => setdate(el.target.value)} value={date}>
-          {daysList.map((e, i) => (
-            <option key={i} value={e}>
-              {e}
-            </option>
-          ))}
-        </Form.Select>
-        <Form.Select onChange={(el) => setType(el.target.value)} value={type}>
-          <option value='1'>OI</option>
-          <option value='2'>Price change</option>
-        </Form.Select>
+        <div className='App-header-r'>
+          <Form.Select onChange={(el) => setdate(el.target.value)} value={date}>
+            {daysList.map((e, i) => (
+              <option key={i} value={e}>
+                {e}
+              </option>
+            ))}
+          </Form.Select>
+          <Form.Select onChange={(el) => setType(el.target.value)} value={type}>
+            <option value='1'>OI</option>
+            <option value='2'>Price change</option>
+          </Form.Select>
+          <Form.Select onChange={(el) => setMinDiff(el.target.value)} value={minDiff}>
+            <option value={0.1}>0.1</option>
+            <option value={1}>1</option>
+            <option value={2}>2</option>
+            <option value={5}>5</option>
+            <option value={7}>7</option>
+            <option value={10}>10</option>
+          </Form.Select>
+        </div>
+        <div className='App-header-r'>
+          <Button
+            className='refresh-button'
+            variant='info'
+            disabled={loading}
+            onClick={loading ? () => {} : loadData}
+          >
+            {loading && <Spinner as='span' animation='border' size='sm' role='status' aria-hidden='true' />}
+            {loading ? 'Loading...' : 'Refresh'}
+          </Button>
 
-        <Form.Select onChange={(el) => setMinDiff(el.target.value)} value={minDiff}>
-          <option value={0.1}>0.1</option>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={5}>5</option>
-          <option value={7}>7</option>
-          <option value={10}>10</option>
-        </Form.Select>
-
-        <Button className='refresh-button' variant='info' disabled={loading} onClick={loading ? () => {} : loadData}>
-          {loading && <Spinner as='span' animation='border' size='sm' role='status' aria-hidden='true' />}
-          {loading ? 'Loading...' : 'Refresh'}
-        </Button>
-
-        <Button variant='warning' disabled={loading} onClick={loading ? () => {} : resetChanges}>
-          Reset
-        </Button>
+          <Button variant='warning' disabled={loading} onClick={loading ? () => {} : resetChanges}>
+            Reset
+          </Button>
+        </div>
       </div>
 
       <Graph apiResponse={apiResponse} type={type} />
