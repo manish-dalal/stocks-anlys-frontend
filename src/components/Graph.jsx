@@ -9,7 +9,6 @@ export const Graph = ({ apiResponse, type }) => {
   const zeroLegendMap = apiResponse.stocksKeys.reduce((acArr, element) => ({ ...acArr, [element]: 0 }), {});
 
   const handleMouseEnter = (o) => {
-    console.log('dfdfo', o);
     const { dataKey } = o;
     const obje = apiResponse.stocksMap;
     Object.keys(obje).forEach((v) => (obje[v] = 0.1));
@@ -33,8 +32,9 @@ export const Graph = ({ apiResponse, type }) => {
     return apiResponse.stocksMap[b] - apiResponse.stocksMap[a];
   });
 
-  const deviceLimit = width < 400 ? 10 : 20;
-  const limitedData = sortedLegend.slice(0, deviceLimit);
+  // const deviceLimit = width < 400 ? 10 : 20;
+  const limitedData = sortedLegend
+  // .slice(0, deviceLimit);
 
   return (
     <LineChart

@@ -40,9 +40,14 @@ const transformResponse = ({ data, type, minDiff }) => {
   //     return a.createdAt.localeCompare(b.createdAt);
   //   }),
   const latestData = response.positions.length ? response.positions[response.positions.length - 1] : [];
+  const filterResponse = JSON.parse(latestData.text).filter(
+    (element) =>
+      (type === '1' && Math.abs(parseFloat(element['%chng in OI'])) >= minDiff) ||
+      (type === '2' && Math.abs(parseFloat(element['%chng'])) >= minDiff)
+  );
   return {
     latestDate: latestData.createdAt,
-    latestData: JSON.parse(latestData.text),
+    latestData: filterResponse,
     stocksKeys: Object.keys(stocksMap),
     stocksMap,
     data: finalRes,
