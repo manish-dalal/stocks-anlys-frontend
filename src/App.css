@@ -9,7 +9,8 @@
 
 .App-header {
   display: flex;
-  height: 50px;
+  min-height: 50px;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
