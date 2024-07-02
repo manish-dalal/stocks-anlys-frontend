@@ -44,13 +44,14 @@ const App = () => {
 
   useEffect(() => {
     loadData();
-    const myInterval = setInterval(() => loadData(), 120 * 1000);
+    const myInterval = setInterval(() => loadData(), 2 * 60 * 1000);
     return () => clearInterval(myInterval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, minDiff, type]);
 
   return (
     <div className='App'>
+      <Graph apiResponse={apiResponse} type={type} />
       <div className='App-header'>
         <div className='App-header-r'>
           <Form.Select onChange={(el) => setdate(el.target.value)} value={date}>
@@ -89,9 +90,6 @@ const App = () => {
           </Button>
         </div>
       </div>
-
-      <Graph apiResponse={apiResponse} type={type} />
-
       <StocksTable apiResponse={apiResponse} />
     </div>
   );
