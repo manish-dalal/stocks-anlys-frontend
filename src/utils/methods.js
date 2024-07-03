@@ -57,9 +57,11 @@ const transformResponse = ({ data, type, minDiff }) => {
 export const fetchData = ({ date, type, minDiff }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await axios.get(
-        `https://8948bdad-9d60-4da8-9923-5762f04c45d8-00-1y1zyfk9ljr44.sisko.replit.dev/api/position/v1/list?date=${date}`
-      );
+      const backendUrl =
+        localStorage.getItem('activeBackend') === '1'
+          ? `https://stocks-anlys-backend.onrender.com/api/position/v1/list?date=${date}`
+          : `https://8948bdad-9d60-4da8-9923-5762f04c45d8-00-1y1zyfk9ljr44.sisko.replit.dev/api/position/v1/list?date=${date}`;
+      const response = await axios.get(backendUrl);
       const transformedRes = transformResponse({ data: response.data, type, minDiff });
       return resolve(transformedRes);
     } catch (error) {
@@ -87,3 +89,5 @@ export const colorsArray = [
   '#3E822B',
   '#CF81D5',
 ];
+
+export const apiIntervalArray = ['10000', '30000', '60000', '120000']

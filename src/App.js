@@ -4,8 +4,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
 import './App.css';
-import { Graph, StocksTable } from './components';
-import { fetchData, getDaysArray } from './utils';
+import { Graph, StocksTable, Settings } from './components';
+import { fetchData, getDaysArray, apiIntervalArray } from './utils';
 
 const App = () => {
   const daysList = getDaysArray(10);
@@ -44,7 +44,8 @@ const App = () => {
 
   useEffect(() => {
     loadData();
-    const myInterval = setInterval(() => loadData(), 2 * 60 * 1000);
+    const durationFromStore =  parseInt(apiIntervalArray[localStorage.getItem('apiInterval')])
+    const myInterval = setInterval(() => loadData(), durationFromStore || 2 * 60 * 1000);
     return () => clearInterval(myInterval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, minDiff, type]);
@@ -88,6 +89,8 @@ const App = () => {
           <Button variant='warning' disabled={loading} onClick={loading ? () => {} : resetChanges}>
             Reset
           </Button>
+
+          <Settings />
         </div>
       </div>
       <StocksTable apiResponse={apiResponse} />
