@@ -41,6 +41,7 @@ export const Settings = () => {
               localStorage.setItem('apiInterval', apiInterval)
               localStorage.setItem('activeBackend', activeBackend)
               handleClose();
+              window.location.reload()
             }}
           >
             Save Changes

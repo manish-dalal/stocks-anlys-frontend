@@ -44,7 +44,7 @@ const App = () => {
 
   useEffect(() => {
     loadData();
-    const durationFromStore =  parseInt(apiIntervalArray[localStorage.getItem('apiInterval')])
+    const durationFromStore =  apiIntervalArray[parseInt(localStorage.getItem('apiInterval'))]
     const myInterval = setInterval(() => loadData(), durationFromStore || 2 * 60 * 1000);
     return () => clearInterval(myInterval);
     // eslint-disable-next-line react-hooks/exhaustive-deps

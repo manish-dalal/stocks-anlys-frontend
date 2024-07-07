@@ -90,4 +90,4 @@ export const colorsArray = [
   '#CF81D5',
 ];
 
-export const apiIntervalArray = ['10000', '30000', '60000', '120000']
+export const apiIntervalArray = [10000, 30000, 60000, 120000]
